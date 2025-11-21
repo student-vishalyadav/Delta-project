@@ -1,0 +1,60 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="row">
+  <div class="col-9 offset-2">
+    <div class="container mt-4">
+      <br><br>
+      <h1>Create New Listing</h1>
+
+      <form method="POST" action="/listings" enctype="multipart/form-data">
+
+        <div class="mb-3">
+          <label for="title" class="form-label">Title</label>
+          <input name="listing[title]" id="title" class="form-control"
+                 placeholder="Add a catchy Title" type="text" required/>
+        </div>
+
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea name="listing[description]" id="description"
+                    class="form-control" rows="3"
+                    placeholder="Enter Description" required></textarea>
+        </div>
+
+        <!-- ⭐ File Upload -->
+        <div class="mb-3">
+          <label class="form-label">Upload Image File</label>
+          <input type="file" name="listing[image]" class="form-control">
+        </div>
+
+        <!-- ⭐ URL Upload -->
+        <div class="mb-3">
+          <label class="form-label">OR Paste Image URL</label>
+          <input type="text" name="listing[imageUrl]" class="form-control"
+                 placeholder="https://example.com/image.jpg">
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="price" class="form-label">Price</label>
+            <input name="listing[price]" id="price" class="form-control" placeholder="1200" required>
+          </div>
+
+          <div class="col-md-6">
+            <label for="country" class="form-label">Country</label>
+            <input name="listing[country]" id="country" class="form-control" placeholder="India" type="text" required>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="location" class="form-label">Location</label>
+          <input name="listing[location]" id="location" class="form-control"
+                 placeholder="Jaipur, Rajasthan" type="text" required>
+        </div>
+
+        <button type="submit" class="add-btn">Add Listing</button>
+        <br><br>
+      </form>
+    </div>
+  </div>
+</div>

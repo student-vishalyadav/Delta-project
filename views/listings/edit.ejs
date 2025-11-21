@@ -1,0 +1,127 @@
+<% layout('layouts/boilerplate') %>
+
+<h1 class="mt-4">Edit Listing</h1>
+
+<form 
+  action="/listings/<%= listing._id %>?_method=PUT" 
+  method="POST" 
+  enctype="multipart/form-data"
+>
+
+  <!-- Title -->
+  <div class="mb-3">
+    <label for="title" class="form-label">Title</label>
+    <input 
+      id="title"
+      name="listing[title]" 
+      value="<%= listing.title %>" 
+      type="text" 
+      class="form-control" 
+      required
+    >
+  </div>
+
+  <!-- Description -->
+  <div class="mb-3">
+    <label for="description" class="form-label">Description</label>
+    <textarea 
+      id="description"
+      name="listing[description]" 
+      rows="3"
+      class="form-control"
+      required
+    ><%= listing.description %></textarea>
+  </div>
+
+  <!-- ⭐ Existing Image Preview -->
+  <div class="mb-3">
+    <label class="form-label">Current Image</label>
+    <img 
+      src="<%= listing.image?.url || 'https://placehold.co/600x400?text=No+Image' %>" 
+      class="img-fluid rounded mb-2 border"
+      style="max-height: 250px;"
+      id="currentImg"
+    >
+  </div>
+
+  <!-- ⭐ Upload New Image + Live Preview -->
+  <div class="mb-3">
+    <label for="image" class="form-label">Upload New Image</label>
+
+    <input 
+      id="image"
+      name="listing[image]" 
+      type="file" 
+      class="form-control"
+      accept="image/*"
+    >
+
+    <!-- New Preview (hidden by default) -->
+    <img 
+      id="newImgPreview"
+      class="img-fluid rounded mt-3 border"
+      style="max-height: 250px; display:none;"
+    >
+  </div>
+
+  <script>
+    // ⭐ LIVE Image Preview Script
+    document.getElementById('image').addEventListener('change', function (event) {
+      const file = event.target.files[0];
+      const preview = document.getElementById('newImgPreview');
+
+      if (file) {
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = "block"; // show new image
+      }
+    });
+  </script>
+
+  <!-- Price + Country -->
+  <div class="row mb-3">
+    
+    <div class="col-md-6">
+      <label for="price" class="form-label">Price</label>
+      <input 
+        id="price"
+        name="listing[price]" 
+        value="<%= listing.price %>" 
+        type="number" 
+        class="form-control"
+        required
+      >
+    </div>
+
+    <div class="col-md-6">
+      <label for="country" class="form-label">Country</label>
+      <input 
+        id="country"
+        name="listing[country]" 
+        value="<%= listing.country %>" 
+        type="text" 
+        class="form-control"
+        required
+      >
+    </div>
+
+  </div>
+
+  <!-- Location -->
+  <div class="mb-3">
+    <label for="location" class="form-label">Location</label>
+    <input 
+      id="location"
+      name="listing[location]" 
+      value="<%= listing.location %>" 
+      type="text" 
+      class="form-control"
+      required
+    >
+  </div>
+
+  <!-- Submit -->
+  <button type="submit" class="update-btn btn btn-dark">
+    Save Changes
+  </button>
+
+</form>

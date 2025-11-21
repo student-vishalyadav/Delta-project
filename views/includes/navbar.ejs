@@ -1,0 +1,81 @@
+<style>
+ .btn-search{
+    background-color: #fe424d;
+    color: #fff;
+
+    /* IMPORTANT: make button a flex container so icon + text align perfectly */
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;            /* space between icon and text */
+    padding: 0 12px;
+    height: 38px;        /* match input height */
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .btn-search:hover{
+    background-color: #df2f3b;
+    color: #fff;
+  }
+
+  /* ensure icon behaves well */
+  .btn-search i {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1;
+    font-size: 16px; /* adjust if icon too big/small */
+  }
+
+  /* optional: make input same height as button */
+  .form-control {
+    height: 38px;
+  }
+</style>
+
+<nav class="navbar navbar-expand-md fixed-top bg-white shadow-sm">
+  <div class="container-fluid">
+    
+    <a class="navbar-brand" href="/listings">
+      <i class="fa-solid fa-compass"></i>
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+
+      <!-- LEFT SIDE -->
+      <div class="navbar-nav">
+        <a class="nav-link" href="/listings">Explore</a>
+      </div>
+
+      <!-- RIGHT SIDE -->
+      <div class="navbar-nav ms-auto">
+        <form class="d-flex" role="search">
+          <input class="form-control me-2" type="search" placeholder="Search destinations" aria-label="Search" />
+          
+          <button class="btn btn-search" type="submit">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            Search
+          </button>
+
+        </form>
+      </div>
+
+      <div class="navbar-nav ms-auto">
+        <a class="nav-link" href="/listings/new">Airbnb Your Home</a>
+
+        <% if (!currUser) { %>
+          <a class="nav-link" href="/signup"><b>Signup</b></a>
+          <a class="nav-link" href="/login"><b>Login</b></a>
+        <% } else { %>
+          <a class="nav-link" href="/logout"><b>Logout</b></a>
+        <% } %>
+      </div>
+
+    </div>
+  </div>
+</nav>

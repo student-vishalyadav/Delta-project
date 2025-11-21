@@ -1,0 +1,80 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow p-4 rounded-4 border-0">
+        <h2 class="text-center mb-4 fw-bold">SignUp on Wanderlust</h2>
+
+        <!-- Signup Form -->
+        <form
+          class="needs-validation"
+          novalidate
+          action="/signup"
+          method="POST"
+        >
+          <!-- Username -->
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input
+              type="text"
+              class="form-control"
+              id="username"
+              name="username"
+              placeholder="Enter username"
+              required
+            />
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">Please enter a username.</div>
+          </div>
+
+          <!-- Email -->
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              name="email"
+              placeholder="Enter email"
+              required
+            />
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">Please enter a valid email.</div>
+          </div>
+
+          <!-- Password -->
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              name="password"
+              placeholder="Enter password"
+              minlength="6"
+              required
+            />
+            <div class="invalid-feedback">
+              Password must be at least 6 characters long.
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <div class="d-grid">
+            <button class="btn btn-success fw-semibold" type="submit">
+              SignUp
+            </button>
+          </div>
+        </form>
+
+        <p class="text-center mt-3 mb-0">
+          Already have an account?
+          <a href="/login" class="text-decoration-none fw-semibold text-primary">
+            Login here
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
