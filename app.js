@@ -11,41 +11,50 @@ const LocalStrategy = require("passport-local");
 const User = require("./models/user");
 require("dotenv").config();
 
-// ROUTES
 const listings = require("./routes/listings");
 const reviews = require("./routes/reviews");
 const userRouter = require("./routes/user");
 
 const app = express();
 
-// DATABASE CONNECTION
+
+// 🔥 DATABASE CONNECTION
+
 async function main() {
   await mongoose.connect(process.env.ATLAS_URL);
 }
 main()
   .then(() => console.log("✅ Database connected successfully"))
-  .catch((err) => console.error("❌ DB connection error:", err));
+  .catch((err) => console.log("❌ DB ERROR:", err));
 
-// VIEW ENGINE SETUP
+// VIEW ENGINE
+
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
+
 // MIDDLEWARE
+
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 
-// SESSION STORE
+
+// 🔥 FIXED SESSION STORE FOR RENDER
+
 const store = MongoStore.create({
   mongoUrl: process.env.ATLAS_URL,
-  crypto: { secret: process.env.SECRET },
-  touchAfter: 24 * 60 * 60,
+  touchAfter: 24 * 3600, // 24 hours
+});
+
+store.on("error", function (e) {
+  console.log("SESSION STORE ERROR:", e);
 });
 
 const sessionOptions = {
   store,
-  secret: process.env.SECRET,
+  secret: process.env.SECRET || "thisshouldbeabettersecret!",
   resave: false,
   saveUninitialized: false,
   cookie: {
@@ -57,60 +66,74 @@ const sessionOptions = {
 app.use(session(sessionOptions));
 app.use(flash());
 
+
 // PASSPORT AUTH
+
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// GLOBAL FLASH + CURRENT USER
+
+// GLOBAL VARIABLES
+
 app.use((req, res, next) => {
+  res.locals.currUser = req.user;
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
-  res.locals.currUser = req.user;
   next();
 });
 
-// HOME ROUTE 
+
+// HOME ROUTE
+
 app.get("/", (req, res) => {
   res.redirect("/listings");
 });
 
-// DEMO USER ROUTE
+
+// DEMO USER (optional)
+
 app.get("/demouser", async (req, res) => {
   try {
-    const fakeUser = new User({
+    const user = new User({
       email: "student@gmail.com",
       username: "delta-student",
     });
-
-    const registeredUser = await User.register(fakeUser, "Helloworld");
+    const registeredUser = await User.register(user, "Helloworld");
     res.send(registeredUser);
-  } catch (e) {
-    res.send(e.message);
+  } catch (err) {
+    res.send(err.message);
   }
 });
 
-// ROUTERS
+
+// ROUTES
+
 app.use("/", userRouter);
 app.use("/listings", listings);
 app.use("/listings/:id/reviews", reviews);
 
-// 404 ROUTE
+
+// 404 PAGE
+
 app.all("*", (req, res) => {
-  res.status(404).render("error", { message: "Page not found!" });
+  res.status(404).render("error", { message: "Page Not Found!" });
 });
+
 
 // GLOBAL ERROR HANDLER
+
 app.use((err, req, res, next) => {
-  console.log("🔥 ERROR →", err);
-  const { status = 500, message = "Something went wrong" } = err;
-  res.status(status).render("error", { message });
+  console.log("🔥 ERROR:", err);
+  res.status(500).render("error", { message: err.message || "Something went wrong" });
 });
 
+
 // START SERVER
-const port = process.env.PORT || 8080;
+
+const port = process.env.PORT || 10000;
 app.listen(port, () => {
   console.log(`🚀 Server running on port: ${port}`);
 });
