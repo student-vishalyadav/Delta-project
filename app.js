@@ -39,7 +39,8 @@ app.use(express.static(path.join(__dirname, "public")));
 // SESSION STORE
 const store = MongoStore.create({
   mongoUrl: process.env.ATLAS_URL,
-  ttl: 14 * 24 * 60 * 60,
+  crypto: { secret: process.env.SECRET },
+  touchAfter: 24 * 60 * 60,
 });
 
 const sessionOptions = {
@@ -54,14 +55,11 @@ const sessionOptions = {
 };
 
 app.use(session(sessionOptions));
-
-// FLASH
 app.use(flash());
 
 // PASSPORT AUTH
 app.use(passport.initialize());
 app.use(passport.session());
-
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
@@ -74,7 +72,12 @@ app.use((req, res, next) => {
   next();
 });
 
-// DEMO ROUTE
+// HOME ROUTE 
+app.get("/", (req, res) => {
+  res.redirect("/listings");
+});
+
+// DEMO USER ROUTE
 app.get("/demouser", async (req, res) => {
   try {
     const fakeUser = new User({
